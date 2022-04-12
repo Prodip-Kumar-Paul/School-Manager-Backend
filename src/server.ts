@@ -10,16 +10,15 @@ process.on('uncaughtException', (err) => {
 
 import app from './app';
 
-// const DB = config.DB_URL.replace('<password>', config.DB_PASSWORD);
-
 // DB connection
+import './utils/db-connection';
 
 const port = process.env.PORT || config.PORT || 8080;
 const server = app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(
     `Server started on PORT: ${port} in ${
-      process.env.NODE_ENV || 'dev'?.trim().toUpperCase()
+      config.NODE_ENV || 'dev'?.trim().toUpperCase()
     } mode`,
   );
 });
