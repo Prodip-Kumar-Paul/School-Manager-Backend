@@ -5,10 +5,10 @@ import ConfigData from '../types/configData.js';
 dotenv.config({
   path: path.join(__dirname, `config.${process.env.NODE_ENV?.trim()}.env`),
 });
-// console.log(
-//    "ENV file path --> ",
-//    path.join(__dirname, `config.${process.env.NODE_ENV.trim()}.env`)
-// );
+console.log(
+  'ENV file path --> ',
+  path.join(__dirname, `config.${process.env.NODE_ENV.trim()}.env`),
+);
 
 import configDev from './config.dev';
 import configProd from './config.prod';
