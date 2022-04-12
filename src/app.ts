@@ -1,4 +1,4 @@
-import express, { RequestHandler } from 'express';
+import express from 'express';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
@@ -19,7 +19,7 @@ app.use(cors());
 app.use(helmet());
 app.use(
   express.static(path.join(__dirname, 'public'), {
-    setHeaders: function (res, path, stat) {
+    setHeaders: function (res) {
       res.set('x-timestamp', Date.now().toString());
     },
   }),
@@ -76,7 +76,7 @@ app.use('/api/v1/test', testApis);
 app.use(globalErrorHandler);
 
 // 404 MIDDLEWARE
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).json({
     message: 'resourse not found',
   });

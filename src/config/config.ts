@@ -3,12 +3,15 @@ import path from 'node:path';
 import ConfigData from '../types/configData.js';
 
 dotenv.config({
-  path: path.join(__dirname, `config.${process.env.NODE_ENV?.trim()}.env`),
+  path: path.join(
+    __dirname,
+    `config.${process.env.NODE_ENV || 'dev'?.trim()}.env`,
+  ),
 });
-console.log(
-  'ENV file path --> ',
-  path.join(__dirname, `config.${process.env.NODE_ENV.trim()}.env`),
-);
+// console.log(
+//   'ENV file path --> ',
+//   path.join(__dirname, `config.${process.env.NODE_ENV.trim()}.env`),
+// );
 
 import configDev from './config.dev';
 import configProd from './config.prod';
@@ -20,6 +23,6 @@ if (process.env.NODE_ENV?.trim() === 'dev') {
 } else if (process.env.NODE_ENV?.trim() === 'prod') {
   config = { ...configProd };
 }
-console.log(config);
+// console.log(config);
 
 export default config;

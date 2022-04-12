@@ -3,11 +3,10 @@ import {
   ErrorRequestHandler,
   Request,
   Response,
-  NextFunction,
 } from 'express';
-import { validationResult } from 'express-validator';
+import { ValidationError, validationResult } from 'express-validator';
 import config from '../config/config';
-import MyError from '../types/error';
+import CustomError from '../types/error';
 
 const errorHandler: RequestHandler = (req, res, next) => {
   try {
@@ -16,17 +15,17 @@ const errorHandler: RequestHandler = (req, res, next) => {
       res.status(200).json({
         type: 0,
         message: 'invalid inputs',
-        errors: errors.array().map(({ msg, param }) => {
-          return {
-            msg,
-            param,
-          };
-        }),
+        errors: errors.array().map(({ msg, param }: ValidationError) => ({
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          msg,
+          param,
+        })),
       });
     } else {
       next();
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
     res.status(500).json({
       status: false,
@@ -35,13 +34,7 @@ const errorHandler: RequestHandler = (req, res, next) => {
   }
 };
 
-// interface CustomErrorRequestHandler {
-//   err: Error;
-//   req: Request;
-//   res: Response;
-// }
-
-const sendErrorDev = (err: MyError, req: Request, res: Response) => {
+const sendErrorDev = (err: CustomError, req: Request, res: Response) => {
   return res.status(err.statusCode).json({
     error: err,
     message: err.message,
@@ -51,7 +44,7 @@ const sendErrorDev = (err: MyError, req: Request, res: Response) => {
   });
 };
 
-const sendErrorProd = (err: MyError, req: Request, res: Response) => {
+const sendErrorProd = (err: CustomError, req: Request, res: Response) => {
   return res.status(err.statusCode).json({
     message: err.message,
     data: err.data,
@@ -59,8 +52,12 @@ const sendErrorProd = (err: MyError, req: Request, res: Response) => {
   });
 };
 
-const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.log('Culprit lies here ..... ', err);
+const globalErrorHandler: ErrorRequestHandler = (
+  err: CustomError,
+  req,
+  res,
+) => {
+  // console.log('Culprit lies here ..... ', err);
 
   err.statusCode = err.statusCode || 500;
   err.status = err.status || false;

@@ -45,8 +45,8 @@
     "ts-node": "^10.7.0"
   },
   "lint-staged": {
-    "*.ts": "eslint . --ext .js,.ts",
-    "*.ts": "prettier --config prettier.config.js --write",
-    "*.ts": "prettier --write"
+    "*.ts?(x)": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "*.{ts,tsx,css}": "prettier --config prettier.config.js --write",
+    "*.{ts,tsx}": "prettier --write"
   }
 }
