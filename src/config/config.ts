@@ -20,6 +20,6 @@ if (process.env.NODE_ENV?.trim() === 'dev') {
 } else if (process.env.NODE_ENV?.trim() === 'prod') {
   config = { ...configProd };
 }
-// console.log(config);
+console.log(config);
 
 export default config;
