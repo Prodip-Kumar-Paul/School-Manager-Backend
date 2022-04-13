@@ -9,4 +9,5 @@ export default interface ConfigData {
   readonly DB_HOST: string;
   readonly DB_URL: string;
   readonly DB_PASSWORD: string;
+  JWT_SECRET_KEY: string;
 }

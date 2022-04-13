@@ -24,6 +24,7 @@ const configDev: ConfigData = {
   DB_HOST: process.env.DB_HOST || '',
   DB_URL: process.env.DB_URL || '',
   DB_PASSWORD: process.env.DB_PASSWORD || '',
+  JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || '',
 };
 
 export default configDev;

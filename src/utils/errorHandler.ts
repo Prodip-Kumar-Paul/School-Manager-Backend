@@ -6,7 +6,7 @@ import {
 } from 'express';
 import { ValidationError, validationResult } from 'express-validator';
 import config from '../config/config';
-import CustomError from '../types/error';
+import { CustomError } from '../types/error';
 
 const errorHandler: RequestHandler = (req, res, next) => {
   try {

@@ -10,7 +10,7 @@ import path from 'node:path';
 
 import { globalErrorHandler } from './utils/errorHandler';
 
-import testApis from './apis/testApi';
+import testApis from './apis/test.api';
 
 //app  and middleware
 const app = express();

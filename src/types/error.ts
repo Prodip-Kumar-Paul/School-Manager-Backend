@@ -1,4 +1,4 @@
-export default interface CustomError {
+export interface CustomError {
   name?: string;
   message?: string;
   status?: boolean;
@@ -6,4 +6,10 @@ export default interface CustomError {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
   stack?: string;
+}
+
+export interface ErrorType {
+  error: Error;
+  statusCode?: number;
+  data?: unknown;
 }
