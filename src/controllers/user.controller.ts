@@ -9,10 +9,10 @@ const { user } = new PrismaClient();
 
 /**
  * @description - This function is used to login a user or school_admin
- * @auth no
- * @route {GET} /user/login
+ * @auth not required
+ * @route {POST} /user/login
  * @body {email: string, password: string}
- * @returns token and user details
+ * @returns provide token and user details
  */
 
 const logInController = asyncHandler(async (req, res, next) => {
