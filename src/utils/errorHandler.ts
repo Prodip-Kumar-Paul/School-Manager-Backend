@@ -57,7 +57,8 @@ const globalErrorHandler: ErrorRequestHandler = (
   req,
   res,
 ) => {
-  // console.log('Culprit lies here ..... ', err);
+  // eslint-disable-next-line no-console
+  console.log('Culprit lies here ..... ', err);
 
   err.statusCode = err.statusCode || 500;
   err.status = err.status || false;

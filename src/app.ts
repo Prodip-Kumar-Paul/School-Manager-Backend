@@ -11,6 +11,7 @@ import path from 'node:path';
 import { globalErrorHandler } from './utils/errorHandler';
 
 import testApis from './apis/test.api';
+import userApis from './apis/user.api';
 
 //app  and middleware
 const app = express();
@@ -71,6 +72,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/v1/test', testApis);
+app.use('/api/v1/user', userApis);
 
 // EROOR HANDLING MIDDLEWARE
 app.use(globalErrorHandler);

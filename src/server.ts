@@ -17,7 +17,11 @@ import app from './app';
 
 // import './utils/db-connection';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  errorFormat: 'pretty',
+  rejectOnNotFound: true,
+  log: ['query', 'info', 'warn'],
+});
 
 prisma
   .$connect()
