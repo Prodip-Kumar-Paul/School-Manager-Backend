@@ -16,12 +16,8 @@ const { user } = new PrismaClient();
  */
 
 const logInController = asyncHandler(async (req, res, next) => {
-  // const email: string = req.body.email;
-  // const password: string = req.body.password;
-
-  const { email, password } = req.body as { email: string; password: string };
-
   try {
+    const { email, password } = req.body as { email: string; password: string };
     const findUser = await user.findUnique({
       where: {
         email,
