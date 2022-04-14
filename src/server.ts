@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client';
 import config from './config/config';
 
 process.on('uncaughtException', (err) => {
@@ -10,16 +11,29 @@ process.on('uncaughtException', (err) => {
 
 import app from './app';
 
-// DB connection
-import './utils/db-connection';
+/*
+ * DB connection
+ */
+
+// import './utils/db-connection';
+
+const prisma = new PrismaClient();
+
+prisma
+  .$connect()
+  .then(() => {
+    // eslint-disable-next-line no-console
+    console.log('DB connected successfully!');
+  })
+  // eslint-disable-next-line no-console
+  .catch((err: Error) => console.log(err));
 
 const port = process.env.PORT || config.PORT || 8080;
+const ENV = config.NODE_ENV || 'dev';
 const server = app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(
-    `Server started on PORT: ${port} in ${
-      config.NODE_ENV || 'dev'?.trim().toUpperCase()
-    } mode`,
+    `Server started on PORT: ${port} in ${ENV.trim().toUpperCase()} mode`,
   );
 });
 

@@ -9,7 +9,16 @@
     "start": "nodemon ./src/server.ts",
     "start:dev": "SET NODE_ENV=dev & nodemon --watch src/**/* -e ts,json --exec node --inspect -r ts-node/register ./src/server.ts",
     "start:prod": "SET NODE_ENV=prod & npm run build",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prisma:migrate": "prisma migrate dev --skip-seed",
+    "prisma:format": "prisma format",
+    "prisma:generate": "prisma generate",
+    "prisma:generate:watch": "prisma generate --watch",
+    "prisma:seed": "prisma db seed --preview-feature",
+    "prisma:studio": "npx prisma studio",
+    "prisma:reset": "prisma migrate reset",
+    "prisma:db-pull": "npx prisma db pull",
+    "prisma:db-push": "npx prisma db push"
   },
   "keywords": [
     "school manager",
@@ -18,6 +27,7 @@
   "author": "Developer",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^3.12.0",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
@@ -38,7 +48,6 @@
     "morgan": "^1.10.0",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.18.0",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
@@ -47,6 +56,7 @@
     "lint-staged": "^12.3.7",
     "nodemon": "^2.0.15",
     "prettier": "^2.6.2",
+    "prisma": "^3.12.0",
     "ts-node": "^10.7.0"
   },
   "lint-staged": {
