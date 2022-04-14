@@ -26,7 +26,7 @@ const logInController = asyncHandler(async (req, res, next) => {
 
     if (!findUser) {
       return res.status(200).json({
-        message: 'Invalid email or password',
+        message: 'No User Found',
         data: findUser,
         status: false,
       });
