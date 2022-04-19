@@ -11,6 +11,7 @@ import path from 'node:path';
 import { globalErrorHandler } from './utils/errorHandler';
 
 import dumpApis from './apis/dump.api';
+import authApis from './apis/auth.api';
 import userApis from './apis/user.api';
 
 //app  and middleware
@@ -72,10 +73,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/v1/dump', dumpApis);
+app.use('/api/v1/auth', authApis);
 app.use('/api/v1/user', userApis);
-
-// EROOR HANDLING MIDDLEWARE
-app.use(globalErrorHandler);
 
 // 404 MIDDLEWARE
 app.use((req, res) => {
@@ -83,5 +82,8 @@ app.use((req, res) => {
     message: 'resourse not found',
   });
 });
+
+// EROOR HANDLING MIDDLEWARE
+app.use(globalErrorHandler);
 
 export default app;

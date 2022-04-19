@@ -9,6 +9,8 @@ const configDev: ConfigData = {
   PORT: process.env.DEV_PORT,
   DATABASE_URL: process.env.DATABASE_URL || '',
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || '',
+  PASSWORD: process.env.DEV_PASSWORD || '',
+  EMAIL: process.env.DEV_EMAIL || '',
 };
 
 export default configDev;
