@@ -7,9 +7,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model School {
+  id String @id @default(uuid())
+  email String @unique
+  name String
+  address String
+  phone String @unique
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("schools")
+}
+
 model User {
   id        String  @id @default(uuid())
   email     String  @unique
-  password  String  @default("1234")
+  password  String 
+  name      String
+  type      String @default("ASSISTANT_TEACHER")
+  school    School  @relation(fields: [schoolId], references: [id])
+  schoolId  String
+  otp      String?
+  otpExpiry DateTime? 
   isDeleted Boolean @default(false)
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("users")
 }
