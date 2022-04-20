@@ -5,7 +5,7 @@
 const getOtp = () => {
   const otp = Math.floor(100000 + Math.random() * 900000);
   const dateInstance = new Date();
-  dateInstance.setMinutes(dateInstance.getMinutes() + 10);
+  dateInstance.setMinutes(dateInstance.getMinutes() + 30);
 
   return { otp: otp.toString(), otpExpiry: dateInstance };
 };

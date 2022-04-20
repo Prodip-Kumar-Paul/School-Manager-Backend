@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { body } from 'express-validator';
 
 import logInController from '../controllers/auth/auth.controller';
+import verifySignupOTP from '../controllers/auth/signup-otp.controller';
 import validationErrorHandler from '../middlewares/validation-error-handler';
 
 const router = Router();
@@ -25,6 +26,12 @@ router.post(
   ],
   validationErrorHandler,
   logInController,
+);
+
+router.post(
+  '/verify_signup_otp',
+  [body('id').notEmpty(), body('otp').notEmpty()],
+  verifySignupOTP,
 );
 
 export default router;

@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
-import User from '@/types/user';
+import User from '@/types/user-body-type';
 import getSignupOtpTemplate from '../../templates/signup-otp';
 import asyncHandler from '../../utils/asyncHandler';
 import getOtp from '../../utils/get-otp';
