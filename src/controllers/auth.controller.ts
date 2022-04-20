@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 
 import asyncHandler from '../utils/asyncHandler';
 import config from '../config/config';
@@ -10,57 +10,78 @@ const { user } = new PrismaClient();
 /**
  * @description - This function is used to login a user or school_admin
  * @auth not required
- * @route {POST} /user/login
+ * @route {POST} /auth/login
  * @body {email: string, password: string}
  * @returns provide token and user details
  */
 
 const logInController = asyncHandler(async (req, res, next) => {
   try {
-    const { email, password } = req.body as { email: string; password: string };
-    const findUser = await user.findUnique({
+    const { email, password } = req.body as Partial<User>;
+    const foundUser = await user.findUnique({
       where: {
         email,
       },
     });
 
-    if (!findUser) {
-      return res.status(200).json({
-        message: 'No User Found',
-        data: findUser,
+    if (!foundUser) {
+      return res.status(404).json({
+        message: 'No user found with this email',
+        data: null,
         status: false,
       });
     }
 
-    const isEqual = await bcrypt.compare(password, findUser.password);
+    if (foundUser.isDeleted) {
+      return res.status(400).json({
+        message: 'User is not active',
+        data: null,
+        status: false,
+      });
+    }
+
+    if (!foundUser.isVerified) {
+      return res.status(400).json({
+        message: 'User is not verified',
+        data: null,
+        status: false,
+      });
+    }
+
+    const isEqual = await bcrypt.compare(password!, foundUser.password);
     if (!isEqual) {
       /**
        * TODO => need to do something better than this
        */
-
-      // const error = new Error('Wrong Password');
-      // error.statusCode = 200;
-      // throw error;
-      // return next(new Error('Wrong Password'));
-      return res.status(200).json({
+      return res.status(400).json({
         message: 'Wrong Password',
-        data: findUser,
+        data: null,
         status: false,
       });
     }
 
     const token = jwt.sign(
       {
-        type: 'SCHOOL_ADMIN',
-        id: findUser.id.toString(),
-        email: findUser.email,
+        type: foundUser.type,
+        id: foundUser.id,
+        schoolId: foundUser.schoolId,
       },
       config.JWT_SECRET_KEY,
-      { expiresIn: '2d' },
+      { expiresIn: '7d' },
     );
+
     res.status(200).json({
       message: 'success',
-      data: { findUser, token },
+      data: {
+        user: {
+          id: foundUser.id,
+          email: foundUser.email,
+          type: foundUser.type,
+          schoolId: foundUser.schoolId,
+          name: foundUser.name,
+        },
+        token,
+      },
       status: true,
     });
   } catch (err) {
