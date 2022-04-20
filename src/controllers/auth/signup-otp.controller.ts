@@ -6,6 +6,13 @@ import verifyOTP from '../../utils/verify-otp';
 
 const { user } = new PrismaClient();
 
+/**
+ * @description - This function to verify the OTP sent to the user's email
+ * @auth not required
+ * @route {POST} /auth/verify_signu_otp
+ * @body {id: string, otp: string}
+ */
+
 const verifySignupOTP = asyncHandler(async (req, res) => {
   try {
     const { otp, id } = req.body as { id: string; otp: string };

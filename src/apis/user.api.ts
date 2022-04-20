@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { body } from 'express-validator';
 
 import getAllUsers from '../controllers/user/get-all-users.controller';
+import getUserById from '../controllers/user/get-user-by-id.controller';
 import createNewUser from '../controllers/user/new-user.controller';
 import hasType from '../middlewares/has-type';
 import isAuth from '../middlewares/is-auth';
@@ -42,5 +43,14 @@ router.post(
 );
 
 router.get('/get_all_users', isAuth, hasType('PRINCIPAL'), getAllUsers);
+
+router.post(
+  '/get_user_by_id',
+  isAuth,
+  hasType('PRINCIPAL'),
+  [body('id').notEmpty()],
+  validationErrorHandler,
+  getUserById,
+);
 
 export default router;

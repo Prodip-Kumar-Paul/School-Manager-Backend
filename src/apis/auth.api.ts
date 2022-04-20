@@ -31,6 +31,7 @@ router.post(
 router.post(
   '/verify_signup_otp',
   [body('id').notEmpty(), body('otp').notEmpty()],
+  validationErrorHandler,
   verifySignupOTP,
 );
 
