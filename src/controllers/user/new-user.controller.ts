@@ -42,7 +42,7 @@ const createNewUser = asyncHandler(async (req, res) => {
         otp,
         otpExpiry,
       },
-      select: { email: true, name: true, type: true },
+      select: { email: true, name: true, type: true, id: true },
     });
 
     if (!createdUser) {
