@@ -19,20 +19,16 @@ const { user } = new PrismaClient();
 const logInController = asyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body as Partial<User>;
-    const foundUser = await user.findUnique({
+    const foundUser = await user.findFirst({
       where: {
         email,
+        isDeleted: false,
       },
     });
 
     if (!foundUser) {
       res.status(404);
       return throwError('No user found with this email');
-    }
-
-    if (foundUser.isDeleted) {
-      res.status(400);
-      return throwError('User is not active');
     }
 
     if (!foundUser.isVerified) {

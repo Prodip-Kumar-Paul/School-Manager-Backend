@@ -8,12 +8,12 @@ datasource db {
 }
 
 model School {
-  id String @id @default(uuid())
-  email String @unique
-  name String
+  id      String @id @default(uuid())
+  email   String @unique
+  name    String
   address String
-  phone String @unique
-  users User[]
+  phone   String @unique
+  users   User[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -21,17 +21,20 @@ model School {
 }
 
 model User {
-  id        String  @id @default(uuid())
-  email     String  @unique
-  password  String 
-  name      String
-  type      String @default("ASSISTANT_TEACHER")
-  school    School  @relation(fields: [schoolId], references: [id])
-  schoolId  String
-  otp      String?
-  otpExpiry DateTime? 
-  isDeleted Boolean @default(false)
-  isVerified Boolean @default(false)
+  id          String    @id @default(uuid())
+  email       String    @unique
+  password    String
+  name        String
+  type        String    @default("ASSISTANT_TEACHER")
+  school      School    @relation(fields: [schoolId], references: [id])
+  schoolId    String
+  description String
+  teacherId   String
+  phone       String
+  otp         String?
+  otpExpiry   DateTime?
+  isDeleted   Boolean   @default(false)
+  isVerified  Boolean   @default(false)
 
 
   createdAt DateTime @default(now())
