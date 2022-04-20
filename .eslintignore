@@ -1,2 +1,3 @@
 build/
 prettier.config.js
+node_modules
