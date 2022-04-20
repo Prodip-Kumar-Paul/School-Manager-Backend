@@ -8,11 +8,10 @@ import cors from 'cors';
 import hpp from 'hpp';
 import path from 'node:path';
 
-import { globalErrorHandler } from './utils/errorHandler';
-
 import dumpApis from './apis/dump.api';
 import authApis from './apis/auth.api';
 import userApis from './apis/user.api';
+import errorHandler from './middlewares/error-handler';
 
 //app  and middleware
 const app = express();
@@ -83,7 +82,11 @@ app.use((req, res) => {
   });
 });
 
+// console.log("Before error handler");
+
 // EROOR HANDLING MIDDLEWARE
-app.use(globalErrorHandler);
+app.use(errorHandler);
+
+// console.log("After error handler");
 
 export default app;

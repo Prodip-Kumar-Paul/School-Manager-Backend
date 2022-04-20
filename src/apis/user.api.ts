@@ -1,20 +1,25 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
 
+import getAllUsers from '../controllers/user/get-all-users.controller';
 import createNewUser from '../controllers/user/new-user.controller';
+import hasType from '../middlewares/has-type';
+import isAuth from '../middlewares/is-auth';
+import validationErrorHandler from '../middlewares/validation-error-handler';
 import validateType from '../middlewares/validators/validate-type';
-import { errorHandler } from '../utils/errorHandler';
 
 const router = Router();
 
 /**
  * @description - These routes are used for user CRUD operations
  * @auth - required
- * @route {GET} /user
+ * @route /user
  * */
 
 router.post(
   '/create_new_user',
+  isAuth,
+  hasType('PRINCIPAL'),
   [
     body('email').notEmpty().isEmail(),
     body('password')
@@ -32,8 +37,10 @@ router.post(
       .withMessage('Invalid user type'),
     body('name').notEmpty().withMessage('Please specify the user name'),
   ],
-  errorHandler,
+  validationErrorHandler,
   createNewUser,
 );
+
+router.get('/get_all_users', isAuth, hasType('PRINCIPAL'), getAllUsers);
 
 export default router;

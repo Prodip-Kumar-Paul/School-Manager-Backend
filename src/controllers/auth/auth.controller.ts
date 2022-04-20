@@ -2,8 +2,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { PrismaClient, User } from '@prisma/client';
 
-import asyncHandler from '../utils/asyncHandler';
-import config from '../config/config';
+import asyncHandler from '../../utils/asyncHandler';
+import config from '../../config/config';
+import throwError from '../../utils/throw-error';
 
 const { user } = new PrismaClient();
 
@@ -15,7 +16,7 @@ const { user } = new PrismaClient();
  * @returns provide token and user details
  */
 
-const logInController = asyncHandler(async (req, res, next) => {
+const logInController = asyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body as Partial<User>;
     const foundUser = await user.findUnique({
@@ -25,39 +26,24 @@ const logInController = asyncHandler(async (req, res, next) => {
     });
 
     if (!foundUser) {
-      return res.status(404).json({
-        message: 'No user found with this email',
-        data: null,
-        status: false,
-      });
+      res.status(404);
+      return throwError('No user found with this email');
     }
 
     if (foundUser.isDeleted) {
-      return res.status(400).json({
-        message: 'User is not active',
-        data: null,
-        status: false,
-      });
+      res.status(400);
+      return throwError('User is not active');
     }
 
     if (!foundUser.isVerified) {
-      return res.status(400).json({
-        message: 'User is not verified',
-        data: null,
-        status: false,
-      });
+      res.status(400);
+      return throwError('User is not verified');
     }
 
-    const isEqual = await bcrypt.compare(password!, foundUser.password);
+    const isEqual = await bcrypt.compare(password || '', foundUser.password);
     if (!isEqual) {
-      /**
-       * TODO => need to do something better than this
-       */
-      return res.status(400).json({
-        message: 'Wrong Password',
-        data: null,
-        status: false,
-      });
+      res.status(400);
+      return throwError('Password is incorrect');
     }
 
     const token = jwt.sign(
@@ -85,7 +71,7 @@ const logInController = asyncHandler(async (req, res, next) => {
       status: true,
     });
   } catch (err) {
-    next(err);
+    throw err;
   }
 });
 

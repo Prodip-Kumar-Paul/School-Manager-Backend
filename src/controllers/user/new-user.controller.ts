@@ -6,6 +6,7 @@ import getSignupOtpTemplate from '../../templates/signup-otp';
 import asyncHandler from '../../utils/asyncHandler';
 import getOtp from '../../utils/get-otp';
 import sendEmail from '../../utils/send-email';
+import throwError from '../../utils/throw-error';
 
 const { user } = new PrismaClient();
 
@@ -16,7 +17,7 @@ const { user } = new PrismaClient();
  * @returns {User}
  */
 
-const createNewUser = asyncHandler(async (req, res, next) => {
+const createNewUser = asyncHandler(async (req, res) => {
   try {
     const { email, password, schoolId, type, name } = req.body as User;
     const isPresent = await user.findUnique({
@@ -24,11 +25,8 @@ const createNewUser = asyncHandler(async (req, res, next) => {
     });
 
     if (isPresent) {
-      return res.status(200).json({
-        message: 'User already present',
-        data: isPresent,
-        status: false,
-      });
+      res.status(400);
+      return throwError('User already exists');
     }
 
     const { otp, otpExpiry } = getOtp();
@@ -48,11 +46,8 @@ const createNewUser = asyncHandler(async (req, res, next) => {
     });
 
     if (!createdUser) {
-      return res.status(400).json({
-        message: 'User not created. Something went wrong',
-        status: false,
-        data: null,
-      });
+      res.status(400);
+      return throwError('User not created. Something went wrong');
     }
 
     const emailContent = getSignupOtpTemplate(otp);
@@ -64,7 +59,7 @@ const createNewUser = asyncHandler(async (req, res, next) => {
       data: createdUser,
     });
   } catch (err) {
-    next(err);
+    throw err;
   }
 });
 
