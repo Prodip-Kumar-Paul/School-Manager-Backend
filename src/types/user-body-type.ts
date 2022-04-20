@@ -8,4 +8,7 @@ export default interface User {
   password: string;
   schoolId: string;
   type: string;
+  teacherId: string;
+  phone: string;
+  description: string;
 }

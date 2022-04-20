@@ -5,7 +5,10 @@ const users = Array(10)
     password: `${index}`,
     name: `User ${index}`,
     type: 'ASSISTANT_TEACHER',
-    schoolId: 'cff52cf7-d67d-4535-bb85-ad21a87e30b7',
+    schoolId: 'ea13d4aa-642b-4783-a085-d27582bfe29d',
+    teacherId: `T-${index}`,
+    phone: `${index}`,
+    description: `${index}`,
   }));
 
 export default users;

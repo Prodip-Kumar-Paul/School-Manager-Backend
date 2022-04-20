@@ -19,6 +19,9 @@ const getUserById = asyncHandler(async (req, res) => {
         isVerified: true,
         isDeleted: true,
         createdAt: true,
+        description: true,
+        phone: true,
+        teacherId: true,
       },
     });
     if (!foundUser) {

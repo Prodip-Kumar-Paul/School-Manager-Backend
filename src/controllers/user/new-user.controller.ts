@@ -19,7 +19,8 @@ const { user } = new PrismaClient();
 
 const createNewUser = asyncHandler(async (req, res) => {
   try {
-    const { email, password, schoolId, type, name } = req.body as User;
+    const { email, password, schoolId, type, name, phone, description } =
+      req.body as User;
     const isPresent = await user.findUnique({
       where: { email },
     });
@@ -28,6 +29,8 @@ const createNewUser = asyncHandler(async (req, res) => {
       res.status(400);
       return throwError('User already exists');
     }
+
+    const count = await user.count();
 
     const { otp, otpExpiry } = getOtp();
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -39,6 +42,9 @@ const createNewUser = asyncHandler(async (req, res) => {
         schoolId,
         name,
         type,
+        phone,
+        description,
+        teacherId: `T-${count + 1}`,
         otp,
         otpExpiry,
       },
