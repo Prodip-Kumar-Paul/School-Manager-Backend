@@ -4,6 +4,7 @@ import { body } from 'express-validator';
 import getAllUsers from '../controllers/user/get-all-users.controller';
 import getUserById from '../controllers/user/get-user-by-id.controller';
 import createNewUser from '../controllers/user/new-user.controller';
+import updateUserDetails from '../controllers/user/update-user-details.controller';
 import hasType from '../middlewares/has-type';
 import isAuth from '../middlewares/is-auth';
 import validationErrorHandler from '../middlewares/validation-error-handler';
@@ -51,6 +52,15 @@ router.post(
   [body('id').notEmpty()],
   validationErrorHandler,
   getUserById,
+);
+
+router.post(
+  '/update_user_details',
+  [body('id').notEmpty()],
+  validationErrorHandler,
+  isAuth,
+  hasType('PRINCIPAL'),
+  updateUserDetails,
 );
 
 export default router;
