@@ -6,6 +6,13 @@ import throwError from '../../utils/throw-error';
 
 const { user } = new PrismaClient();
 
+/**
+ * @auth required
+ * @route {POST} /user/update_user_details
+ * @body {name: string, description: string, phone: string, status: string}
+ * @returns {updated count}
+ */
+
 const updateUserDetails = asyncHandler(async (req, res) => {
   try {
     const { name, description, phone, status } = req.body as User;
@@ -22,11 +29,13 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     if (phone) {
       body.phone = phone;
     }
-    if (status.trim() === 'active' || status.trim() === 'inactive') {
-      body.status = status.trim().toUpperCase();
-    } else {
-      res.status(200);
-      return throwError('Invalid status');
+    if (status) {
+      if (status.trim() === 'active' || status.trim() === 'inactive') {
+        body.status = status.trim().toUpperCase();
+      } else {
+        res.status(200);
+        return throwError('Invalid status');
+      }
     }
 
     const updatedUser = await user.updateMany({

@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 
 import getAllUsers from '../controllers/user/get-all-users.controller';
 import getUserById from '../controllers/user/get-user-by-id.controller';
 import createNewUser from '../controllers/user/new-user.controller';
+import searchDetails from '../controllers/user/search-details.controller';
 import updateUserDetails from '../controllers/user/update-user-details.controller';
 import hasType from '../middlewares/has-type';
 import isAuth from '../middlewares/is-auth';
@@ -61,6 +62,16 @@ router.post(
   isAuth,
   hasType('PRINCIPAL'),
   updateUserDetails,
+);
+
+// not used yet
+router.get(
+  '/search_details',
+  [query('searchKey').notEmpty()],
+  validationErrorHandler,
+  isAuth,
+  hasType('PRINCIPAL'),
+  searchDetails,
 );
 
 export default router;
