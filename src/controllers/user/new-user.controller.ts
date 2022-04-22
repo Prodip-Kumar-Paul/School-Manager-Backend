@@ -19,7 +19,7 @@ const { user } = new PrismaClient();
 
 const createNewUser = asyncHandler(async (req, res) => {
   try {
-    const { email, password, schoolId, type, name, phone, description } =
+    const { email, password, type, name, phone, description } =
       req.body as User;
     const isPresent = await user.findUnique({
       where: { email },
@@ -39,7 +39,7 @@ const createNewUser = asyncHandler(async (req, res) => {
       data: {
         email,
         password: hashedPassword,
-        schoolId,
+        schoolId: req.schoolId || '',
         name,
         type,
         phone,
