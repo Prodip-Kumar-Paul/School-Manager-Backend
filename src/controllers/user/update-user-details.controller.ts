@@ -18,7 +18,7 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     const { name, description, phone, status } = req.body as User;
     const { id } = req.body as { id: string };
 
-    const body = {} as User;
+    const body: Partial<User> = {};
 
     if (name) {
       body.name = name;
