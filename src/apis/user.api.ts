@@ -29,9 +29,6 @@ router.post(
       .withMessage(
         'password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter',
       ),
-    body('schoolId')
-      .notEmpty()
-      .withMessage('A user must be associated with a school'),
     body('type')
       .notEmpty()
       .custom(validateType)
