@@ -8,10 +8,10 @@ import cors from 'cors';
 import hpp from 'hpp';
 import path from 'node:path';
 
-import { globalErrorHandler } from './utils/errorHandler';
-
-import testApis from './apis/test.api';
+import dumpApis from './apis/dump.api';
+import authApis from './apis/auth.api';
 import userApis from './apis/user.api';
+import errorHandler from './middlewares/error-handler';
 
 //app  and middleware
 const app = express();
@@ -71,11 +71,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/v1/test', testApis);
+app.use('/api/v1/dump', dumpApis);
+app.use('/api/v1/auth', authApis);
 app.use('/api/v1/user', userApis);
-
-// EROOR HANDLING MIDDLEWARE
-app.use(globalErrorHandler);
 
 // 404 MIDDLEWARE
 app.use((req, res) => {
@@ -83,5 +81,12 @@ app.use((req, res) => {
     message: 'resourse not found',
   });
 });
+
+// console.log("Before error handler");
+
+// EROOR HANDLING MIDDLEWARE
+app.use(errorHandler);
+
+// console.log("After error handler");
 
 export default app;
