@@ -15,7 +15,9 @@ const getAllUsers = asyncHandler(async (req, res) => {
         name: true,
         email: true,
         type: true,
-        schoolId: true,
+        isActive: true,
+        createdAt: true,
+        teacherId: true,
       },
     });
 
