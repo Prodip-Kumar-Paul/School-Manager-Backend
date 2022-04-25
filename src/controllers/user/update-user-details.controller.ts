@@ -15,7 +15,7 @@ const { user } = new PrismaClient();
 
 const updateUserDetails = asyncHandler(async (req, res) => {
   try {
-    const { name, description, phone, status } = req.body as User;
+    const { name, description, phone, isActive } = req.body as User;
     const { id } = req.body as { id: string };
 
     const body: Partial<User> = {};
@@ -29,13 +29,8 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     if (phone) {
       body.phone = phone;
     }
-    if (status) {
-      if (status.trim() === 'active' || status.trim() === 'inactive') {
-        body.status = status.trim().toUpperCase();
-      } else {
-        res.status(200);
-        return throwError('Invalid status');
-      }
+    if (typeof isActive === 'boolean') {
+      body.isActive = isActive;
     }
 
     const updatedUser = await user.updateMany({

@@ -31,7 +31,7 @@ model User {
   description String
   teacherId   String
   phone       String
-  status      String    @default("ACTIVE")
+  isActive    Boolean   @default(true)
   otp         String?
   otpExpiry   DateTime?
   isDeleted   Boolean   @default(false)
