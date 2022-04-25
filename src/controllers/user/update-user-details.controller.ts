@@ -29,7 +29,7 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     if (phone) {
       body.phone = phone;
     }
-    if (isActive && typeof isActive == 'boolean') {
+    if (typeof isActive === 'boolean') {
       body.isActive = isActive;
     }
 
