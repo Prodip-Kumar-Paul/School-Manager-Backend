@@ -4,6 +4,7 @@ import config from '../config/config';
 import { TokenType } from '@/types/authType';
 import { Req } from '@/types/extended-types';
 import throwError from '../utils/throw-error';
+import userType from '@/types/user-type';
 
 const isAuth = (req: Req, res: Response, next: NextFunction) => {
   try {
@@ -31,7 +32,7 @@ const isAuth = (req: Req, res: Response, next: NextFunction) => {
     const { id, type, schoolId } = decodedToken;
 
     req.id = id;
-    req.type = type;
+    req.type = type as userType;
     req.schoolId = schoolId;
 
     next();
