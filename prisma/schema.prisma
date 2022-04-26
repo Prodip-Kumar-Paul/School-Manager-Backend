@@ -14,7 +14,7 @@ model School {
   address String
   phone   String    @unique
   users   User[]
-  classes Json      @default("{}")
+  classes Class[]
   Lecture Lecture[]
 
   createdAt DateTime @default(now())
@@ -40,37 +40,37 @@ model User {
   isVerified  Boolean   @default(false)
   Lecture     Lecture[]
 
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("users")
 }
 
+model Class {
+  id       String    @id @default(uuid())
+  name     String    @unique // keeping it as string to compensate the diffenent sections in the class
+  lectures Lecture[]
+  school   School    @relation(fields: [schoolId], references: [id])
+  schoolId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("classes")
+}
+
 model Lecture {
   id        String   @id @default(uuid())
   subject   String
+  day       String
   school    School   @relation(fields: [schoolId], references: [id])
   schoolId  String
   teacher   User     @relation(fields: [teacherId], references: [id])
   teacherId String
+  class     Class    @relation(fields: [classId], references: [id])
+  classId   String
   startTime DateTime
   endTime   DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("lectures")
-}
-
-model Routine {
-  id    String @id @default(uuid())
-  day_1 Json[]
-  day_2 Json[]
-  day_3 Json[]
-  day_4 Json[]
-  day_5 Json[]
-  day_6 Json[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  @@map("routines")
 }
