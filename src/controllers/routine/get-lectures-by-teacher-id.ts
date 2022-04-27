@@ -1,60 +1,71 @@
-import { Grade, PrismaClient } from '@prisma/client';
-import Lecture from '../../models/lecture.model';
+import { PrismaClient } from '@prisma/client';
 
 import asyncHandler from '../../utils/asyncHandler';
-import throwError from '../../utils/throw-error';
 
-const { grade } = new PrismaClient();
+const { lecture } = new PrismaClient();
 
 /**
  * @auth required
- * @route {POST} /routine/create_new_lecture
- * @body {email: string, password: string, schoolId: string, type: string, name: string}
- * @returns {routine}
+ * @route {POST} /routine/get_routine_by_teacher_id
+ * @body {week: boolean, day: string}
+ * @returns {teachers routine}
  */
 
-const createNewLecture = asyncHandler(async (req, res) => {
+const getLectureByTeacherId = asyncHandler(async (req, res) => {
   try {
-    const { name } = req.body as Grade;
-    const { subject, day, startTime, endTime } = req.body as Lecture;
+    const { day } = req.query as unknown as {
+      day: string;
+    };
 
-    const isPresent = await grade.findUnique({
-      where: { name },
-    });
-    if (isPresent) {
-      res.status(200);
-      return throwError('Grade name already exists');
+    const { id, schoolId, type } = req;
+
+    let teacherId = id;
+    type
+      ? 'PRINCIPAL' || 'SENIOR_TEACHER'
+      : (teacherId = req.query.teacherId as string);
+
+    const body = {} as {
+      day: string;
+    };
+
+    const possibleDays = [
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+    ];
+
+    if (day && possibleDays.includes(day)) {
+      body.day = day;
     }
-    const newLecture = await grade.create({
-      data: {
-        name: name,
-        schoolId: req.schoolId || '',
-        lectures: {
-          create: [
-            {
-              subject,
-              day,
-              startTime,
-              endTime,
-              schoolId: req.schoolId || '',
-              teacherId: req.id || '',
-            },
-          ],
-        },
-      },
+
+    const foundLectures = await lecture.findMany({
+      where: { schoolId, isDeleted: false, teacherId, ...body },
       include: {
-        lectures: true,
+        school: true,
+        teacher: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            description: true,
+            phone: true,
+          },
+        },
+        grade: true,
       },
     });
 
     res.status(200).json({
-      message: 'Lecture created successfully.',
+      message: 'Lectures found.',
       status: true,
-      data: newLecture,
+      data: foundLectures,
     });
   } catch (err) {
     throw err;
   }
 });
 
-export default createNewLecture;
+export default getLectureByTeacherId;
