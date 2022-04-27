@@ -29,6 +29,13 @@ const updateLectureDetails = asyncHandler(async (req, res) => {
       req.body as Lecture;
     const lectureDetails = {} as Partial<Lecture>;
 
+    const isPresent = await lecture.findFirst({ where: { id } });
+
+    if (!isPresent) {
+      res.status(404);
+      return throwError('Lecture not found');
+    }
+
     if (subject) {
       lectureDetails.subject = subject;
     }
