@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
+import deleteLecture from '../controllers/routine/delete-lecture';
 import createNewLecture from '../controllers/routine/new-lecture.controller';
 import hasType from '../middlewares/has-type';
 import isAuth from '../middlewares/is-auth';
@@ -25,8 +26,17 @@ router.post(
   ],
   validationErrorHandler,
   isAuth,
-  hasType(['PRINCIPAL']),
+  hasType(['PRINCIPAL', 'SENIOR_TEACHER']),
   createNewLecture,
+);
+
+router.delete(
+  '/delete_lecture',
+  [body('lectureId').notEmpty()],
+  validationErrorHandler,
+  isAuth,
+  hasType(['PRINCIPAL', 'SENIOR_TEACHER']),
+  deleteLecture,
 );
 
 export default router;

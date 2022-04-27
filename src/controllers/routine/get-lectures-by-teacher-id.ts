@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-import Grade from '../../models/grade.model';
+import { Grade, PrismaClient } from '@prisma/client';
 import Lecture from '../../models/lecture.model';
 
 import asyncHandler from '../../utils/asyncHandler';
@@ -10,8 +9,8 @@ const { grade } = new PrismaClient();
 /**
  * @auth required
  * @route {POST} /routine/create_new_lecture
- * @body {name: string, subject: string, day: string, startTime: Date, endTime: Date}
- * @returns {new lecture}
+ * @body {email: string, password: string, schoolId: string, type: string, name: string}
+ * @returns {routine}
  */
 
 const createNewLecture = asyncHandler(async (req, res) => {
