@@ -1,8 +1,9 @@
 import { Router } from 'express';
-// import createNewLecture from '../controllers/routine/new-lecture.controller';
-// import hasType from '../middlewares/has-type';
-// import isAuth from '../middlewares/is-auth';
-// import validationErrorHandler from '../middlewares/validation-error-handler';
+import { body } from 'express-validator';
+import createNewLecture from '../controllers/routine/new-lecture.controller';
+import hasType from '../middlewares/has-type';
+import isAuth from '../middlewares/is-auth';
+import validationErrorHandler from '../middlewares/validation-error-handler';
 
 const router = Router();
 
@@ -13,12 +14,19 @@ const router = Router();
  *
  * */
 
-// router.post(
-//   '/create_new_lecture',
-//   isAuth,
-//   hasType(['PRINCIPAL']),
-//   validationErrorHandler,
-//   createNewLecture,
-// );
+router.post(
+  '/create_new_lecture',
+  [
+    body('name').notEmpty(),
+    body('subject').notEmpty(),
+    body('day').notEmpty(),
+    body('startTime').notEmpty(),
+    body('endTime').notEmpty(),
+  ],
+  validationErrorHandler,
+  isAuth,
+  hasType(['PRINCIPAL']),
+  createNewLecture,
+);
 
 export default router;
