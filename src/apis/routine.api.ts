@@ -31,9 +31,7 @@ router.post(
         'friday',
         'saturday',
       ])
-      .withMessage(
-        'day must be one of monday, tuesday, wednesday, thursday, friday, saturday',
-      ),
+      .withMessage('Please provide a valid day i.e. Monday to sunday'),
     body('startTime').notEmpty(),
     body('endTime').notEmpty(),
   ],

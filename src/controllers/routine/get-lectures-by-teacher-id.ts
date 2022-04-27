@@ -20,6 +20,10 @@ const getLectureByTeacherId = asyncHandler(async (req, res) => {
     const { id, schoolId, type } = req;
 
     let teacherId = id;
+
+    /**
+     * @logic - if principal or senior teachers want to see other teacher's routine
+     */
     type
       ? 'PRINCIPAL' || 'SENIOR_TEACHER'
       : (teacherId = req.query.teacherId as string);

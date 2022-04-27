@@ -16,15 +16,18 @@ const deleteLecture = asyncHandler(async (req, res) => {
   try {
     const { lectureId } = req.body as { lectureId: string };
 
-    const isPresent = await lecture.findUnique({
-      where: { id: lectureId },
+    const isPresent = await lecture.findFirst({
+      where: { id: lectureId, isDeleted: false },
     });
     if (!isPresent) {
       res.status(200);
       return throwError('Lecture not found');
     }
-    const deletedLecture = await lecture.delete({
+    const deletedLecture = await lecture.update({
       where: { id: lectureId },
+      data: {
+        isDeleted: true,
+      },
     });
 
     res.status(200).json({

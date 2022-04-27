@@ -19,11 +19,11 @@ const createNewLecture = asyncHandler(async (req, res) => {
     const { name } = req.body as Grade;
     const { subject, day, startTime, endTime } = req.body as Lecture;
 
-    const isPresent = await grade.findUnique({
-      where: { name },
+    const isPresent = await grade.findFirst({
+      where: { name, isDeleted: false },
     });
     if (isPresent) {
-      res.status(200);
+      res.status(400);
       return throwError('Grade name already exists');
     }
     const newLecture = await grade.create({
