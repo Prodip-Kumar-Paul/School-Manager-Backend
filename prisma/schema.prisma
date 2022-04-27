@@ -14,9 +14,10 @@ model School {
   address String
   phone   String    @unique
   users   User[]
-  classes Class[]
+  grades  Grade[]
   Lecture Lecture[]
 
+  isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("schools")
@@ -36,25 +37,26 @@ model User {
   isActive    Boolean   @default(true)
   otp         String?
   otpExpiry   DateTime?
-  isDeleted   Boolean   @default(false)
   isVerified  Boolean   @default(false)
   Lecture     Lecture[]
 
+  isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("users")
 }
 
-model Class {
+model Grade {
   id       String    @id @default(uuid())
-  name     String    @unique // keeping it as string to compensate the diffenent sections in the class
+  name     String    @unique // keeping it as string to compensate the diffenent sections in the Grade
   lectures Lecture[]
   school   School    @relation(fields: [schoolId], references: [id])
   schoolId String
 
+  isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  @@map("classes")
+  @@map("grades")
 }
 
 model Lecture {
@@ -65,11 +67,12 @@ model Lecture {
   schoolId  String
   teacher   User     @relation(fields: [teacherId], references: [id])
   teacherId String
-  class     Class    @relation(fields: [classId], references: [id])
-  classId   String
+  grade     Grade    @relation(fields: [gradeId], references: [id])
+  gradeId   String
   startTime DateTime
   endTime   DateTime
 
+  isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("lectures")

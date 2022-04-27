@@ -1,10 +1,13 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import updateLectureDetails from '../controllers/routine/update-lecture.controller';
 
+import updateLectureDetails from '../controllers/routine/update-lecture.controller';
+import deleteLecture from '../controllers/routine/delete-lecture';
+import createNewLecture from '../controllers/routine/new-lecture.controller';
 import hasType from '../middlewares/has-type';
 import isAuth from '../middlewares/is-auth';
 import validationErrorHandler from '../middlewares/validation-error-handler';
+import getLecturesByGrade from '../controllers/routine/get-lectures-by-grade';
 
 const router = Router();
 
@@ -15,12 +18,56 @@ const router = Router();
  * */
 
 router.post(
+  '/create_new_lecture',
+  [
+    body('name').notEmpty(),
+    body('subject').notEmpty(),
+    body('day').notEmpty(),
+    body('startTime').notEmpty(),
+    body('endTime').notEmpty(),
+  ],
+  validationErrorHandler,
+  isAuth,
+  hasType(['PRINCIPAL', 'SENIOR_TEACHER']),
+  createNewLecture,
+);
+
+router.delete(
+  '/delete_lecture',
+  [body('lectureId').notEmpty()],
+  validationErrorHandler,
+  isAuth,
+  hasType(['PRINCIPAL', 'SENIOR_TEACHER']),
+  deleteLecture,
+);
+
+router.post(
   '/update_lecture_details',
   isAuth,
   hasType(['PRINCIPAL', 'SENIOR_TEACHER']),
-  [body('lecture_id').not().isEmpty()],
+  [body('id').notEmpty()],
   validationErrorHandler,
   updateLectureDetails,
+);
+
+router.post(
+  '/get_lectures_by_grade',
+  isAuth,
+  [
+    body('grade').notEmpty().withMessage('Please provide a grade.'),
+    body('day')
+      .optional()
+      .isIn([
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+      ]),
+  ],
+  getLecturesByGrade,
 );
 
 export default router;

@@ -11,6 +11,7 @@ import path from 'node:path';
 import dumpApis from './apis/dump.api';
 import authApis from './apis/auth.api';
 import userApis from './apis/user.api';
+import routineApis from './apis/routine.api';
 import errorHandler from './middlewares/error-handler';
 
 //app  and middleware
@@ -74,6 +75,7 @@ app.use((req, res, next) => {
 app.use('/api/v1/dump', dumpApis);
 app.use('/api/v1/auth', authApis);
 app.use('/api/v1/user', userApis);
+app.use('/api/v1/routine', routineApis);
 
 // 404 MIDDLEWARE
 app.use((req, res) => {

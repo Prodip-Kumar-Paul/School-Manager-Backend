@@ -1,10 +1,20 @@
-import Lecture from '@/types/lecture-type';
 import { PrismaClient } from '@prisma/client';
 
+import Lecture from '../../models/lecture.model';
 import asyncHandler from '../../utils/asyncHandler';
 import throwError from '../../utils/throw-error';
 
 const { lecture } = new PrismaClient();
+
+const days = [
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'sunday',
+];
 
 /**
  * @auth required
@@ -22,10 +32,17 @@ const updateLectureDetails = asyncHandler(async (req, res) => {
     if (subject) {
       lectureDetails.subject = subject;
     }
-    if (day) {
+    if (day && days.includes(day.toLowerCase())) {
       lectureDetails.day = day;
     }
     if (teacherId) {
+      const foundTeacher = await lecture.findFirst({
+        where: { id: teacherId },
+      });
+      if (!foundTeacher) {
+        res.status(404);
+        return throwError('Teacher not found');
+      }
       lectureDetails.teacherId = teacherId;
     }
     if (startTime) {
