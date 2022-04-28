@@ -6,16 +6,6 @@ import throwError from '../../utils/throw-error';
 
 const { lecture } = new PrismaClient();
 
-const days = [
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'sunday',
-];
-
 /**
  * @auth required
  * @route {POST} /lecture/update_lecture_details
@@ -29,7 +19,9 @@ const updateLectureDetails = asyncHandler(async (req, res) => {
       req.body as Lecture;
     const lectureDetails = {} as Partial<Lecture>;
 
-    const isPresent = await lecture.findFirst({ where: { id } });
+    const isPresent = await lecture.findFirst({
+      where: { id, isDeleted: false },
+    });
 
     if (!isPresent) {
       res.status(404);
@@ -39,8 +31,8 @@ const updateLectureDetails = asyncHandler(async (req, res) => {
     if (subject) {
       lectureDetails.subject = subject;
     }
-    if (day && days.includes(day.toLowerCase())) {
-      lectureDetails.day = day;
+    if (day) {
+      lectureDetails.day = day.toLowerCase();
     }
     if (teacherId) {
       const foundTeacher = await lecture.findFirst({

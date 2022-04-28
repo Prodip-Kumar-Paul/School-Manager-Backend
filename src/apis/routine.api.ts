@@ -7,7 +7,17 @@ import createNewLecture from '../controllers/routine/new-lecture.controller';
 import hasType from '../middlewares/has-type';
 import isAuth from '../middlewares/is-auth';
 import validationErrorHandler from '../middlewares/validation-error-handler';
-import getLecturesByGrade from '../controllers/routine/get-lectures-by-grade';
+import getLecturesByGrade from '../controllers/routine/get-lectures-by-grade.controller';
+
+const DAYS = [
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'sunday',
+];
 
 const router = Router();
 
@@ -45,7 +55,7 @@ router.post(
   '/update_lecture_details',
   isAuth,
   hasType(['PRINCIPAL', 'SENIOR_TEACHER']),
-  [body('id').notEmpty()],
+  [body('id').notEmpty(), body('day').optional().isIn(DAYS)],
   validationErrorHandler,
   updateLectureDetails,
 );
@@ -55,17 +65,7 @@ router.post(
   isAuth,
   [
     body('grade').notEmpty().withMessage('Please provide a grade.'),
-    body('day')
-      .optional()
-      .isIn([
-        'monday',
-        'tuesday',
-        'wednesday',
-        'thursday',
-        'friday',
-        'saturday',
-        'sunday',
-      ]),
+    body('day').optional().isIn(DAYS),
   ],
   getLecturesByGrade,
 );

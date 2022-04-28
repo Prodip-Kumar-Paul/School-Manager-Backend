@@ -10,16 +10,16 @@ const { school } = new PrismaClient();
  * @auth required
  * @route {POST} /lecture/get_lectures_by_grade
  * @body {grade: string, day?: string }
- * @returns {fected lectures}
+ * @returns {lectures for a particular grade}
  */
 
 const getLecturesByGrade = asyncHandler(async (req, res) => {
   try {
-    const { grade, schoolId, day } = req.body as {
+    const { grade, day } = req.body as {
       grade: string;
-      schoolId: string;
       day?: string;
     };
+    const { schoolId } = req;
 
     /**
      * @note -  if a day is provided, then we will return all the lectures for that day
@@ -60,6 +60,12 @@ const getLecturesByGrade = asyncHandler(async (req, res) => {
       });
     }
 
+    /**
+     * @description - {foundData} is of type school hence it'll have a property called grades
+     *                which is an array of grades. As we are querying for a particular grade,
+     *                we will take the first grade in the array that matches the grade name.
+     *                Then we will take the lectures property of that grade and return.
+     */
     const { lectures } = (foundData as School).grades[0];
 
     if (!lectures) {
