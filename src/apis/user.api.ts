@@ -22,7 +22,7 @@ const router = Router();
 router.post(
   '/create_new_user',
   isAuth,
-  hasType('PRINCIPAL'),
+  hasType(['PRINCIPAL']),
   [
     body('email').notEmpty().isEmail(),
     body('password')
@@ -41,12 +41,12 @@ router.post(
   createNewUser,
 );
 
-router.get('/get_all_users', isAuth, hasType('PRINCIPAL'), getAllUsers);
+router.get('/get_all_users', isAuth, hasType(['PRINCIPAL']), getAllUsers);
 
 router.post(
   '/get_user_by_id',
   isAuth,
-  hasType('PRINCIPAL'),
+  hasType(['PRINCIPAL']),
   [body('id').notEmpty()],
   validationErrorHandler,
   getUserById,
@@ -57,7 +57,7 @@ router.post(
   [body('id').notEmpty()],
   validationErrorHandler,
   isAuth,
-  hasType('PRINCIPAL'),
+  hasType(['PRINCIPAL']),
   updateUserDetails,
 );
 
@@ -67,7 +67,7 @@ router.get(
   [query('searchKey').notEmpty()],
   validationErrorHandler,
   isAuth,
-  hasType('PRINCIPAL'),
+  hasType(['PRINCIPAL']),
   searchDetails,
 );
 
