@@ -26,7 +26,7 @@ const getLectureByTeacherId = asyncHandler(async (req, res) => {
      */
     type
       ? 'PRINCIPAL' || 'SENIOR_TEACHER'
-      : (teacherId = req.query.teacherId as string);
+      : (teacherId = (req.query?.teacherId as string) || id);
 
     const body = {} as {
       day: string;
@@ -41,6 +41,9 @@ const getLectureByTeacherId = asyncHandler(async (req, res) => {
       'saturday',
     ];
 
+    /**
+     * @note - if day is not provided, it will return all days or weekly routine
+     */
     if (day && possibleDays.includes(day)) {
       body.day = day;
     }
