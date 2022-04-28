@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 
 import updateLectureDetails from '../controllers/routine/update-lecture.controller';
 import deleteLecture from '../controllers/routine/delete-lecture';
+import getLectureByTeacherId from '../controllers/routine/get-lectures-by-teacher-id';
 import createNewLecture from '../controllers/routine/new-lecture.controller';
 import hasType from '../middlewares/has-type';
 import isAuth from '../middlewares/is-auth';
@@ -32,7 +33,16 @@ router.post(
   [
     body('name').notEmpty(),
     body('subject').notEmpty(),
-    body('day').notEmpty(),
+    body('day')
+      .isIn([
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+      ])
+      .withMessage('Please provide a valid day i.e. Monday to sunday'),
     body('startTime').notEmpty(),
     body('endTime').notEmpty(),
   ],
@@ -40,6 +50,14 @@ router.post(
   isAuth,
   hasType(['PRINCIPAL', 'SENIOR_TEACHER']),
   createNewLecture,
+);
+
+router.get(
+  '/get_routine_by_teacher_id',
+  validationErrorHandler,
+  isAuth,
+  hasType(['PRINCIPAL', 'SENIOR_TEACHER']),
+  getLectureByTeacherId,
 );
 
 router.delete(
