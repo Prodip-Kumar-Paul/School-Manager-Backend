@@ -1,4 +1,5 @@
 export default interface Lecture {
+  id: string;
   subject: string;
   day: string;
   teacherId: string;
